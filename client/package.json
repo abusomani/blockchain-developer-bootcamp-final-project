@@ -15,6 +15,7 @@
       "@web3-react/injected-connector": "^6.0.7",
       "bootstrap": "^4.6.0",
       "ethers": "^5.1.0",
+      "ipfs-http-client": "^54.0.1",
       "react": "^17.0.1",
       "react-bootstrap": "^1.5.2",
       "react-bootstrap-icons": "^1.4.0",

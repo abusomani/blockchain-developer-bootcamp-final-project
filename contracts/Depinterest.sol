@@ -12,6 +12,7 @@ contract Depinterest is Ownable {
 
     struct Image {
         uint256 id;
+        string url;
         string description;
         uint256 totalTip;
         address payable author;
@@ -29,21 +30,25 @@ contract Depinterest is Ownable {
 
     /// @notice Emitted when an image is created
     /// @param id Image id
+    /// @param url IPFS Url of the image
     /// @param description Description of the image
     /// @param author Author of the image with image id = id
     event ImageCreated(
         uint256 indexed id,
+        string indexed url,
         string indexed description,
         address author
     );
 
     /// @notice Emitted when a new image is tipped
     /// @param id Image id
+    /// @param url IPFS Url of the image
     /// @param description Description of the image
     /// @param tip Amount tipped to this image
     /// @param author Author of the image with image id = id
     event ImageTipped(
         uint256 indexed id,
+        string indexed url,
         string indexed description,
         uint256 tip,
         address author
@@ -52,10 +57,14 @@ contract Depinterest is Ownable {
     constructor() public {}
 
     /// @notice Uploads an image to IPFS
+    /// @param _imgUrl Url of the image
     /// @param _imgDescription Description of the image
-    function uploadImage(string memory _imgDescription) public onlyOwner {
+    function uploadImage(string memory _imgUrl, string memory _imgDescription) public
+    {
         // Make sure the image description exists
         require(bytes(_imgDescription).length > 0, "Image should have some description.");
+        // Make sure the image url exists
+        require(bytes(_imgUrl).length > 0, "Image Url should exist");
         // Make sure uploader address exists
         require(msg.sender != address(0), "Sender address cannot be 0");
 
@@ -65,6 +74,7 @@ contract Depinterest is Ownable {
         // Creates a new image
         Image memory img = Image({
             id: newImageId,
+            url: _imgUrl,
             description: _imgDescription,
             totalTip: 0,
             author: payable(msg.sender)
@@ -79,7 +89,7 @@ contract Depinterest is Ownable {
         // Assign the image in the images list
         images[img.id] = img;
         // Trigger an Image Created event
-        emit ImageCreated(img.id, _imgDescription, msg.sender);
+        emit ImageCreated(img.id, _imgUrl, _imgDescription, msg.sender);
     }
 
     /// @notice Tips the image owner
@@ -98,6 +108,6 @@ contract Depinterest is Ownable {
         // Update the image
         images[_id] = _image;
         // Trigger an Image Tipped event
-        emit ImageTipped(_id, _image.description, _image.totalTip, _author);
+        emit ImageTipped(_id, _image.url, _image.description, _image.totalTip, _author);
     }
 }

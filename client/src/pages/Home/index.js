@@ -5,6 +5,7 @@ import Text from '../../components/Text';
 import Images from '../../components/Images';
 import { useImages } from '../../hooks/useImages';
 import { colors } from '../../theme';
+import FileUpload from '../../components/FileUpload';
 
 const Home = () => {
   const { active } = useWeb3React();
@@ -29,6 +30,7 @@ const Home = () => {
   return (
     <Container className="mt-5 d-flex flex-column justify-content-center align-items-center">
       {!active && <NotActive />}
+      {imagesAddress && <FileUpload imagesAddress={imagesAddress} />}
       {imagesAddress && <Images imagesAddress={imagesAddress} />}
     </Container>
   );

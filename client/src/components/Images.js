@@ -9,7 +9,7 @@ import Text from './Text';
 import { useContract } from '../hooks/useContract';
 import { colors } from '../theme';
 
-import Depinterest from '../../contract-build/contracts/Depinterest.json';
+import DepinterestABI from '../../contract-build/contracts/Depinterest.json';
 
 const imageState = {
   LOADING: 'LOADING',
@@ -57,7 +57,7 @@ const ShowImages = ({ images }) => {
 };
 
 const ImageItem = ({ item }) => {
-  const { description, totalTip } = item;
+  const { url, description, totalTip } = item;
   return (
     <StyledItem>
       <StyledItemTextContainer>
@@ -65,6 +65,7 @@ const ImageItem = ({ item }) => {
         <Text center bold color={colors.green}>
           {formatEther(totalTip)} ETH/mo
         </Text>
+        <img src={url} alt="" style={{ maxWidth: '420px' }} />
       </StyledItemTextContainer>
     </StyledItem>
   );
@@ -74,7 +75,7 @@ const Images = ({ imagesAddress }) => {
   const [images, setImages] = useState([]);
   const [status, setStatus] = useState(imageState.LOADING);
   const { active } = useWeb3React();
-  const contract = useContract(imagesAddress, Depinterest.abi);
+  const contract = useContract(imagesAddress, DepinterestABI.abi);
   const getImages = useCallback(async (contract) => {
     try {
       const idListLengthBN = await contract.idListLength();
