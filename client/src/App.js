@@ -1,0 +1,25 @@
+import React from 'react';
+import { Web3ReactProvider } from '@web3-react/core';
+import { ethers } from 'ethers';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { AppContextProvider } from './AppContext';
+
+import './styles/App.css';
+
+function getLibrary(provider) {
+  return new ethers.providers.Web3Provider(provider);
+}
+
+const App = () => {
+  if (window.ethereum) {
+    window.ethereum.on('networkChanged', () => window.location.reload());
+  }
+
+  return (
+    <AppContextProvider>
+      <Web3ReactProvider getLibrary={getLibrary} />
+    </AppContextProvider>
+  );
+};
+
+export default App;
