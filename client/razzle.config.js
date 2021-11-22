@@ -1,5 +1,6 @@
 module.exports = {
   options: {
+    verbose: true,
     buildType: 'spa',
     enableBabelCache: false,
   },
