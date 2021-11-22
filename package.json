@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "yarn run build && razzle start",
+    "start": "npm run build && razzle start",
     "build": "razzle build --noninteractive "
   },
   "dependencies": {
