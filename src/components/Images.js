@@ -7,7 +7,7 @@ import { useContract } from '../hooks/useContract';
 import { colors } from '../theme';
 import { ImageItem } from './ImageItem';
 
-import DepinterestABI from '../../contract-build/contracts/Depinterest.json';
+import DepinterestABI from '../../client/contract-build/contracts/Depinterest.json';
 
 const ImageState = {
   LOADING: 'LOADING',

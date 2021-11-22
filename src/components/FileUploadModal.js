@@ -3,7 +3,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 import { create } from 'ipfs-http-client';
 import { useContract } from '../hooks/useContract';
-import DepinterestABI from '../../contract-build/contracts/Depinterest.json';
+import DepinterestABI from '../../client/contract-build/contracts/Depinterest.json';
 import UploadButton from '../static/upload-button.png';
 
 const client = create({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
