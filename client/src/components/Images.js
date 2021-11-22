@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Spinner } from 'react-bootstrap';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumber } from 'ethers';
-import Text from './Text';
 import { useContract } from '../hooks/useContract';
 import { colors } from '../theme';
 import { ImageItem } from './ImageItem';
@@ -22,11 +21,19 @@ const StyledDiv = styled.div`
   flex-wrap: wrap;
 `;
 
+const NothingDiv = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+`;
+
 const ShowImages = ({ images }) => {
   const imgs = images;
 
   if (imgs.length < 1) {
-    return <Text>Nothing here 🤷</Text>;
+    return <NothingDiv>Nothing here 🤷</NothingDiv>;
   }
 
   return (

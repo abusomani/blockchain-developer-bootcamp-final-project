@@ -1,21 +1,46 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.0;
+pragma solidity >=0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 /// @title Contract for decentralized image sharing
 /// @author Abhishek Somani
 /// @notice Allows an user to tip an image
-contract Depinterest is Ownable {
+contract Depinterest is Ownable, Pausable, ReentrancyGuard {
     /// @dev Tracks given image ids. Current value is the newest image id.
     uint256 private imageIdCounter = 0;
 
+
+    /// @notice Image structu that captures all the necessary information about an image.
     struct Image {
         uint256 id;
         string url;
         string description;
         uint256 totalTip;
         address payable author;
+    }
+
+    /// @notice Checks if the id is valid or not
+    modifier isValidId(uint _id) {
+        // Make sure the id is valid
+        require(_id > 0 && _id <= imageIdCounter, "Image id is invalid.");
+        _;
+    }
+
+    /// @notice Checks if the image description is non-empty
+    modifier isValidDescription(string memory _imgDescription) {
+        // Make sure the image description exists
+        require(bytes(_imgDescription).length > 0, "Image should have some description.");
+        _;
+    }
+
+    /// @notice Checks if the image url is non-empty
+    modifier isValidUrl(string memory _imgUrl) {
+        // Make sure the image url exists
+        require(bytes(_imgUrl).length > 0, "Image Url should exist");
+        _;
     }
 
     /// @notice List of all iamge ids.
@@ -26,6 +51,7 @@ contract Depinterest is Ownable {
     /// @dev Used as a helper when iterating available images in frontend client.
     uint256 public idListLength;
 
+    /// image id -> Image mapping
     mapping(uint256 => Image) public images;
 
     /// @notice Emitted when an image is created
@@ -54,17 +80,15 @@ contract Depinterest is Ownable {
         address author
     );
 
-    constructor() public {}
+    constructor() {}
 
     /// @notice Uploads an image to IPFS
     /// @param _imgUrl Url of the image
     /// @param _imgDescription Description of the image
     function uploadImage(string memory _imgUrl, string memory _imgDescription) public
+        isValidDescription(_imgDescription)
+        isValidUrl(_imgUrl)
     {
-        // Make sure the image description exists
-        require(bytes(_imgDescription).length > 0, "Image should have some description.");
-        // Make sure the image url exists
-        require(bytes(_imgUrl).length > 0, "Image Url should exist");
         // Make sure uploader address exists
         require(msg.sender != address(0), "Sender address cannot be 0");
 
@@ -94,9 +118,7 @@ contract Depinterest is Ownable {
 
     /// @notice Tips the image owner
     /// @param _id Id of the image to be tipped
-    function tipImageOwner(uint256 _id) public payable {
-        // Make sure the id is valid
-        require(_id > 0 && _id <= imageIdCounter, "Image id to be tipped is invalid.");
+    function tipImageOwner(uint256 _id) public payable isValidId(_id) {
         // Fetch the image
         Image memory _image = images[_id];
         // Fetch the author
@@ -109,5 +131,24 @@ contract Depinterest is Ownable {
         images[_id] = _image;
         // Trigger an Image Tipped event
         emit ImageTipped(_id, _image.url, _image.description, _image.totalTip, _author);
+    }
+
+    /// @notice Withdraw contract's balance to the owner's address
+    /// @dev The function will revert if the send wasn't successful
+    function withdraw() public onlyOwner nonReentrant {
+        (bool sent, ) = msg.sender.call{value: address(this).balance}("");
+        require(sent, "Failed to send Ether");
+    }
+
+    /// @notice pause the contract -- the contract will start functioning in read-only mode.
+    /// @dev Implementing the circuit breaker pattern
+    function pause() public onlyOwner {
+        Pausable._pause();
+    }
+
+    /// @notice resume the contract for both reads and writes
+    /// @dev Implementing the circuit breaker pattern
+    function unpause() public onlyOwner {
+        Pausable._unpause();
     }
 }
