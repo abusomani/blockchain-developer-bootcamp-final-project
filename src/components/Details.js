@@ -5,7 +5,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Link } from 'react-router-dom';
 import { useContract } from '../hooks/useContract';
 import Text from './Text';
-import DepinterestABI from '../../client/contract-build/contracts/Depinterest.json';
+import DepinterestABI from '../../contract-build/contracts/Depinterest.json';
 import { colors } from '../theme';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

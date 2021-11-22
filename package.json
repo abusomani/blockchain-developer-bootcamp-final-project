@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "yarn run build:copy && razzle start",
-    "build": "razzle build --noninteractive ",
-    "build:copy": "cp -a ../build/. contract-build"
+    "start": "yarn run build && razzle start",
+    "build": "razzle build --noninteractive "
   },
   "dependencies": {
     "@ethersproject/constants": "^5.4.0",
