@@ -16,12 +16,16 @@ const BalanceCard = () => {
   }, [account]);
 
   if (!active) {
-    return <Text>{''}</Text>;
+    return (
+      <Text block color={colors.white}>
+        {''}
+      </Text>
+    );
   }
 
   return (
     <StyledHeaderBox>
-      <Text block color={colors.black}>
+      <Text block color={colors.white}>
         ETH balance: {ethBalance}
       </Text>
     </StyledHeaderBox>

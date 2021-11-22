@@ -8,6 +8,7 @@ export const colors = {
   lightGray: '#F3F5F7',
   green: '#7DDE92',
   black: 'black',
+  white: 'white',
 };
 
 export const textSizes = {

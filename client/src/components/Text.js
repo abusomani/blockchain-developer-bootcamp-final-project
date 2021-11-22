@@ -44,16 +44,36 @@ const getTransform = (p) => {
   if (p.uppercase) return 'uppercase';
   return '';
 };
+const getMaxWidth = (p) => {
+  return p.maxWidth;
+};
+const getPadding = (p) => {
+  return p.padding;
+};
+const getPaddingLeft = (p) => {
+  return p.paddingLeft;
+};
+const getPaddingRight = (p) => {
+  return p.paddingRight;
+};
+const getBackgroundColor = (p) => {
+  return p.backgroundColor;
+};
 
 const Text = styled.span`
   font-family: ${(p) => p.fontFamily || 'Courier New'};
   text-decoration: ${(p) => (p.underline ? 'underline' : '')};
+  max-width: ${getMaxWidth};
   text-transform: ${getTransform};
   cursor: ${(p) => (p.pointer ? 'pointer' : '')};
   text-align: ${getAlignment};
   font-style: ${(p) => (p.italic ? 'italic' : '')};
   font-size: ${getSize};
   font-weight: ${getWeight};
+  padding: ${getPadding};
+  padding-left: ${getPaddingLeft};
+  padding-right: ${getPaddingRight};
+  background-color: ${getBackgroundColor};
   display: ${getDisplay};
   color: ${getColor};
   overflow: ${(p) => (p.ellipsis ? 'hidden' : 'inherit')};

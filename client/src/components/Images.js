@@ -1,17 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
-// import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Spinner } from 'react-bootstrap';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumber } from 'ethers';
-import { formatEther } from '@ethersproject/units';
 import Text from './Text';
 import { useContract } from '../hooks/useContract';
 import { colors } from '../theme';
+import { ImageItem } from './ImageItem';
 
 import DepinterestABI from '../../contract-build/contracts/Depinterest.json';
 
-const imageState = {
+const ImageState = {
   LOADING: 'LOADING',
   READY: 'READY',
   ERROR: 'ERROR',
@@ -19,24 +18,8 @@ const imageState = {
 
 const StyledDiv = styled.div`
   display: flex;
-  justify-content: center;
   max-width: 90%;
   flex-wrap: wrap;
-`;
-
-const StyledItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  border-radius: 5px;
-  max-width: 175px;
-`;
-
-const StyledItemTextContainer = styled.div`
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
 `;
 
 const ShowImages = ({ images }) => {
@@ -56,26 +39,12 @@ const ShowImages = ({ images }) => {
   );
 };
 
-const ImageItem = ({ item }) => {
-  const { url, description, totalTip } = item;
-  return (
-    <StyledItem>
-      <StyledItemTextContainer>
-        <Text center>{description}</Text>
-        <Text center bold color={colors.green}>
-          {formatEther(totalTip)} ETH/mo
-        </Text>
-        <img src={url} alt="" style={{ maxWidth: '420px' }} />
-      </StyledItemTextContainer>
-    </StyledItem>
-  );
-};
-
 const Images = ({ imagesAddress }) => {
   const [images, setImages] = useState([]);
-  const [status, setStatus] = useState(imageState.LOADING);
+  const [status, setStatus] = useState(ImageState.LOADING);
   const { active } = useWeb3React();
   const contract = useContract(imagesAddress, DepinterestABI.abi);
+
   const getImages = useCallback(async (contract) => {
     try {
       const idListLengthBN = await contract.idListLength();
@@ -83,10 +52,10 @@ const Images = ({ imagesAddress }) => {
       const ids = idBNs.map((n) => n.toNumber());
       const arr = await Promise.all(ids.map((id) => contract.images(id)));
       setImages(arr);
-      setStatus(imageState.READY);
+      setStatus(ImageState.READY);
     } catch (e) {
       console.error('error:', e);
-      setStatus(imageState.ERROR);
+      setStatus(ImageState.ERROR);
     }
   }, []);
 
@@ -100,7 +69,7 @@ const Images = ({ imagesAddress }) => {
     return null;
   }
 
-  if (status === imageState.LOADING) {
+  if (status === ImageState.LOADING) {
     return <Spinner animation="border" size="sm" style={{ color: colors.green, marginTop: '20px' }} />;
   }
 

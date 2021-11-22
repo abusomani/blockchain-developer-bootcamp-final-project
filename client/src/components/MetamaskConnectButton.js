@@ -7,11 +7,12 @@ import { StyledHeaderBox } from './StyledHelpers';
 import { injected } from '../connectors';
 import { shortenAddress } from '../utils/shortenAddress';
 import { useAppContext } from '../AppContext';
+import { colors } from '../theme';
 
 const ConnectBtn = styled.button`
-  border: 1px solid black;
+  border: 1px solid white;
   background: transparent;
-  color: black;
+  color: white;
   border-radius: 5px;
   margin-left: 10px;
 `;
@@ -68,7 +69,7 @@ const MetamaskConnectButton = () => {
 
   return (
     <StyledHeaderBox>
-      <Text uppercase color="black">
+      <Text uppercase color={colors.white}>
         {shortenAddress(account)}
       </Text>
       <ConnectBtn onClick={() => onLogOut(deactivate, () => history.push('/'))}>Log Out</ConnectBtn>

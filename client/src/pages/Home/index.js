@@ -1,11 +1,18 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import Text from '../../components/Text';
 import Images from '../../components/Images';
 import { useImages } from '../../hooks/useImages';
 import { colors } from '../../theme';
-import FileUpload from '../../components/FileUpload';
+
+import FileUploadModal from '../../components/FileUploadModal';
+
+export const Container = styled.div`
+  display: flex;
+  max-width: 90%;
+  flex-wrap: wrap;
+`;
 
 const Home = () => {
   const { active } = useWeb3React();
@@ -28,9 +35,9 @@ const Home = () => {
   };
 
   return (
-    <Container className="mt-5 d-flex flex-column justify-content-center align-items-center">
+    <Container>
       {!active && <NotActive />}
-      {imagesAddress && <FileUpload imagesAddress={imagesAddress} />}
+      {imagesAddress && <FileUploadModal imagesAddress={imagesAddress} />}
       {imagesAddress && <Images imagesAddress={imagesAddress} />}
     </Container>
   );

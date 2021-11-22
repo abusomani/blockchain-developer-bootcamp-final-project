@@ -1,0 +1,127 @@
+import React, { useState } from 'react';
+import { Modal, Spinner } from 'react-bootstrap';
+import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
+import { Link } from 'react-router-dom';
+import { useContract } from '../hooks/useContract';
+import Text from './Text';
+import DepinterestABI from '../../contract-build/contracts/Depinterest.json';
+import { colors } from '../theme';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Web3Utils = require('web3-utils');
+
+const StyledDiv = styled.div`
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const SpinnerDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`;
+
+const StyledImageContainer = styled.div`
+  justify-content: center;
+  display: flex;
+`;
+
+const DetailsState = {
+  LOADING: 'LOADING',
+  WAITING: 'WAITING_CONFIRMATIONS',
+  READY: 'READY',
+  ERROR: 'ERROR',
+  TIPPED: 'TIPPED',
+};
+
+const CONFIRMATION_COUNT = 2;
+
+const Details = ({ image, imagesAddress, show, modalShowHandler }) => {
+  const [status, setStatus] = useState(DetailsState.READY);
+  const [mmError, setMmError] = useState(null);
+  const [txHash, setTxHash] = useState(null);
+  const { account, chainId } = useWeb3React();
+  const contract = useContract(imagesAddress, DepinterestABI.abi);
+  const imageId = image.id;
+
+  const onTipClick = async () => {
+    setStatus(DetailsState.LOADING);
+    try {
+      setStatus(DetailsState.WAITING);
+      const transaction = await contract.tipImageOwner(imageId, {
+        from: account,
+        value: Web3Utils.toWei('0.1', 'Ether'), // 0.1ETH
+      });
+      const confirmations = chainId === 1337 ? 1 : CONFIRMATION_COUNT;
+      await transaction.wait(confirmations);
+      setTxHash(transaction.hash);
+      setStatus(DetailsState.TIPPED);
+    } catch (e) {
+      setStatus(DetailsState.ERROR);
+      console.log(e);
+      if (e.code && typeof e.code === 'number') {
+        setMmError(e.message);
+      }
+    }
+  };
+
+  const { LOADING, WAITING, READY, TIPPED, ERROR } = DetailsState;
+
+  return (
+    <Modal show={show} onHide={() => modalShowHandler(false)}>
+      <Modal.Header closeButton>
+        <Modal.Title>Tip the owner of this image</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <StyledDiv>
+          <img src={image.url} alt="" width="100%" height="100%" />
+          <Text center title={image.description} padding={'10px'}>
+            {image.description}
+          </Text>
+        </StyledDiv>
+        {status === LOADING ||
+          (status === WAITING && (
+            <SpinnerDiv>
+              <Spinner
+                animation="border"
+                size="sm"
+                style={{ color: colors.green, marginTop: '20px', marginBottom: '20px' }}
+              />
+            </SpinnerDiv>
+          ))}
+        {status === READY && (
+          <StyledImageContainer>
+            <Text center color={colors.white} bold onClick={onTipClick} backgroundColor={colors.purple} padding="5px">
+              TIP 0.1ETH
+            </Text>
+          </StyledImageContainer>
+        )}
+        {status === TIPPED && !!txHash && (
+          <>
+            <Text bold color={colors.purple} style={{ marginTop: '20px', marginBottom: '20px' }}>
+              Thanks for liking! See this transaction in{' '}
+              <Link to={{ pathname: `https://ropsten.etherscan.io/tx/${txHash}` }} target="_blank">
+                Etherscan
+              </Link>
+            </Text>
+          </>
+        )}
+        {status === ERROR && (
+          <Text center style={{ marginTop: '20px', marginBottom: '20px' }} color={colors.red}>
+            {mmError || 'Error encountered!'}
+          </Text>
+        )}
+      </Modal.Body>
+    </Modal>
+  );
+};
+
+export const DetailsWrapper = ({ image, imagesAddress, show, modalShowHandler }) => {
+  if (!imagesAddress) return null;
+  return <Details image={image} imagesAddress={imagesAddress} show={show} modalShowHandler={modalShowHandler} />;
+};

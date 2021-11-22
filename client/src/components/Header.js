@@ -6,6 +6,15 @@ import { useAppContext } from '../AppContext';
 import MetamaskConnectButton from './MetamaskConnectButton';
 import BalancesCard from './BalancesCard';
 import Text from './Text';
+import Logo from '../static/logo.png';
+
+const StyledImage = styled.img`
+  max-height: 50px;
+`;
+
+const StyledDiv = styled.div`
+  background: black;
+`;
 
 const StyledContainer = styled(Container)`
   background-color: tomato;
@@ -36,13 +45,14 @@ const GlobalError = () => {
 
 const Header = () => {
   return (
-    <>
+    <StyledDiv>
       <GlobalError />
       <Navbar className="justify-content-between">
         <BalancesCard />
+        <StyledImage src={Logo} alt="De-pinterest" />
         <MetamaskConnectButton />
       </Navbar>
-    </>
+    </StyledDiv>
   );
 };
 
