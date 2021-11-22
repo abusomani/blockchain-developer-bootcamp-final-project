@@ -4,6 +4,7 @@ module.exports = {
     buildType: 'spa',
     enableBabelCache: false,
   },
+  enableSourceMaps: true,
   modifyWebpackConfig(opts) {
     const config = opts.webpackConfig;
 
