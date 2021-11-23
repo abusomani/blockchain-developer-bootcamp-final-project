@@ -19949,6 +19949,12 @@
     "version": "0.8.10+commit.fc410830.Emscripten.clang"
   },
   "networks": {
+    "3": {
+      "events": {},
+      "links": {},
+      "address": "0x0ecf210b6c62F790160bA346589267a6314aAE6b",
+      "transactionHash": "0xd5db883b834341a0379fe765950d4964af636fc5c37602187818006a8a359618"
+    },
     "1337": {
       "events": {
         "0x00f8602fb4865bbff3a186ffb699fe651b7eebc84ff1c1459938a8a897c514d3": {
@@ -20102,7 +20108,7 @@
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-23T06:03:17.566Z",
+  "updatedAt": "2021-11-23T10:59:50.121Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Abhishek Somani",

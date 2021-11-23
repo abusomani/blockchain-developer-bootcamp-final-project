@@ -2,6 +2,8 @@
 
 ### https://depinterest.vercel.app/
 
+[View the deployed contract](https://ropsten.etherscan.io/address/0x0ecf210b6c62F790160bA346589267a6314aAE6b)
+
 ## Project description
 My idea for blockchain bootcamp is to create a decentralized pinterest where people can share images. People can also like images shared by others. This action transfers some amount of cryptocurrency (0.1 ETH) to the author of the image being liked.
 
