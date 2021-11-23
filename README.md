@@ -1,4 +1,6 @@
 # Decentralized Pinterest
+![De-PinterestThumbnail](https://user-images.githubusercontent.com/8527270/143091621-39d53e40-8530-4576-a36f-140f2dd6a768.png)
+
 ### [Website](https://depinterest.vercel.app/)
 
 [Deployed contract](https://ropsten.etherscan.io/address/0x0ecf210b6c62F790160bA346589267a6314aAE6b)
