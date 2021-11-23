@@ -10,10 +10,9 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 /// @notice Allows an user to tip an image
 contract Depinterest is Ownable, Pausable, ReentrancyGuard {
     /// @dev Tracks given image ids. Current value is the newest image id.
-    uint256 private imageIdCounter = 0;
+    uint256 public imageIdCounter = 0;
 
-
-    /// @notice Image structu that captures all the necessary information about an image.
+    /// @notice Image structure that captures all the necessary information about an image.
     struct Image {
         uint256 id;
         string url;
@@ -49,17 +48,17 @@ contract Depinterest is Ownable, Pausable, ReentrancyGuard {
 
     /// @notice idList length.
     /// @dev Used as a helper when iterating available images in frontend client.
-    uint256 public idListLength;
+    uint256 public idListLength = 0;
 
     /// image id -> Image mapping
     mapping(uint256 => Image) public images;
 
-    /// @notice Emitted when an image is created
+    /// @notice Emitted when an image is uploaded
     /// @param id Image id
     /// @param url IPFS Url of the image
     /// @param description Description of the image
     /// @param author Author of the image with image id = id
-    event ImageCreated(
+    event ImageUploaded(
         uint256 indexed id,
         string indexed url,
         string indexed description,
@@ -80,7 +79,45 @@ contract Depinterest is Ownable, Pausable, ReentrancyGuard {
         address author
     );
 
+
+    /// @notice Emitted if the send money to the author call failed
+    /// @param id id of the image, can be used to view the image later
+    /// @param from Sender's address
+    /// @param to Author's address
+    /// @param amount Tip Amount
+    event ImageTipTransferFailed(
+        uint256 indexed id,
+        address from,
+        address to,
+        uint256 amount
+    );
+
     constructor() {}
+
+    /// @notice Get information about an image
+    /// @param imageId image id
+    /// @return image information: image id, url, description, total tip and address of the author. 
+    function getImage(uint256 imageId) public view isValidId(imageId) returns (
+        uint256,
+        string memory,
+        string memory,
+        uint256,
+        address
+    ){
+        return (
+            images[imageId].id,
+            images[imageId].url,
+            images[imageId].description,
+            images[imageId].totalTip,
+            images[imageId].author
+        );
+    }
+
+    /// @notice Get image count
+    /// @return image count
+    function getImageCount() public view returns (uint256) {
+        return imageIdCounter;
+    }
 
     /// @notice Uploads an image to IPFS
     /// @param _imgUrl Url of the image
@@ -88,6 +125,8 @@ contract Depinterest is Ownable, Pausable, ReentrancyGuard {
     function uploadImage(string memory _imgUrl, string memory _imgDescription) public
         isValidDescription(_imgDescription)
         isValidUrl(_imgUrl)
+        whenNotPaused 
+        nonReentrant 
     {
         // Make sure uploader address exists
         require(msg.sender != address(0), "Sender address cannot be 0");
@@ -112,19 +151,26 @@ contract Depinterest is Ownable, Pausable, ReentrancyGuard {
         idListLength = idList.length;
         // Assign the image in the images list
         images[img.id] = img;
-        // Trigger an Image Created event
-        emit ImageCreated(img.id, _imgUrl, _imgDescription, msg.sender);
+        // Trigger an Image Uploaded event
+        emit ImageUploaded(img.id, _imgUrl, _imgDescription, msg.sender);
     }
 
     /// @notice Tips the image owner
     /// @param _id Id of the image to be tipped
-    function tipImageOwner(uint256 _id) public payable isValidId(_id) {
+    function tipImageOwner(uint256 _id) public payable isValidId(_id) whenNotPaused nonReentrant {
         // Fetch the image
         Image memory _image = images[_id];
         // Fetch the author
         address payable _author = _image.author;
-        // Pay the author by sending them Ether
-        _author.transfer(msg.value);
+        
+        // Pay the author by sending them Ether. Using call because it's recommended in combination with re-entrancy guard
+        // Refer: https://solidity-by-example.org/sending-ether/
+        (bool sent, ) = _author.call{value: msg.value}("");
+        if(!sent) {
+            emit ImageTipTransferFailed(_id, msg.sender, _author, msg.value);
+        }
+        // defending afainst https://swcregistry.io/docs/SWC-104
+        require(sent, "Failed to send Ether");
         // Increment the tip amount
         _image.totalTip = _image.totalTip + msg.value;
         // Update the image
