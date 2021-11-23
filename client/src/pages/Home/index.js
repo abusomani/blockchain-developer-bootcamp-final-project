@@ -10,7 +10,7 @@ import FileUploadModal from '../../components/FileUploadModal';
 
 export const Container = styled.div`
   display: flex;
-  max-width: 90%;
+  max-width: 100%;
   height: 100%;
   flex-wrap: wrap;
 `;

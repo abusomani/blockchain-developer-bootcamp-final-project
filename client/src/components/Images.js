@@ -17,7 +17,7 @@ const ImageState = {
 
 const StyledDiv = styled.div`
   display: flex;
-  max-width: 90%;
+  max-width: 100%;
   flex-wrap: wrap;
 `;
 
