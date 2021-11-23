@@ -68,7 +68,7 @@ const Details = ({ image, imagesAddress, show, modalShowHandler }) => {
       setStatus(DetailsState.WAITING);
       const transaction = await contract.tipImageOwner(imageId, {
         from: account,
-        value: Web3Utils.toWei('0.1', 'Ether'), // 0.1ETH
+        value: Web3Utils.toWei('0.01', 'Ether'), // 0.01ETH
       });
       const confirmations = chainId === 1337 ? 1 : CONFIRMATION_COUNT;
       await transaction.wait(confirmations);
@@ -108,18 +108,23 @@ const Details = ({ image, imagesAddress, show, modalShowHandler }) => {
           </StyledDiv>
           {status === LOADING ||
             (status === WAITING && (
-              <SpinnerDiv>
-                <Spinner
-                  animation="border"
-                  size="sm"
-                  style={{ color: colors.green, marginTop: '20px', marginBottom: '20px' }}
-                />
-              </SpinnerDiv>
+              <>
+                <SpinnerDiv>
+                  <Spinner
+                    animation="border"
+                    size="sm"
+                    style={{ color: colors.green, marginTop: '20px', marginBottom: '20px' }}
+                  />
+                </SpinnerDiv>
+                {status === WAITING && (
+                  <Text>The tip would be confirmed after {CONFIRMATION_COUNT} block confirmations.</Text>
+                )}
+              </>
             ))}
           {status === READY && (
             <StyledImageContainer>
               <Text center color={colors.white} bold onClick={onTipClick} backgroundColor={colors.purple} padding="5px">
-                TIP 0.1ETH
+                TIP 0.01ETH
               </Text>
             </StyledImageContainer>
           )}

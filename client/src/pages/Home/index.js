@@ -15,13 +15,21 @@ export const Container = styled.div`
   flex-wrap: wrap;
 `;
 
+const StyledDiv = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+`;
+
 const Home = () => {
   const { active } = useWeb3React();
   const { imagesAddress } = useImages();
 
   const NotActive = () => {
     return (
-      <Text>
+      <StyledDiv>
         Connect{' '}
         {
           <Text>
@@ -31,7 +39,7 @@ const Home = () => {
           </Text>
         }{' '}
         wallet to continue.
-      </Text>
+      </StyledDiv>
     );
   };
 

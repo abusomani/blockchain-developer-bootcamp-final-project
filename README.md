@@ -5,7 +5,15 @@
 [View the deployed contract](https://ropsten.etherscan.io/address/0x0ecf210b6c62F790160bA346589267a6314aAE6b)
 
 ## Project description
-My idea for blockchain bootcamp is to create a decentralized pinterest where people can share images. People can also like images shared by others. This action transfers some amount of cryptocurrency (0.1 ETH) to the author of the image being liked.
+My idea for blockchain bootcamp is to create a decentralized pinterest where people can share images. People can also like images shared by others. This action transfers some amount of cryptocurrency (0.01 ETH) to the author of the image being liked.
+The idea is to move away from Pinterest having central authority over the platform. This ensures decentralized uploading of images
+and allows people to appreciate art by tipping the author of the image. 
+
+### Use cases :
+- Users should be able to upload image
+- Users should be able to scroll through their feed and see all the images uploaded across the globe
+- Users should be able to tip any image they like with 0.01 ETH
+- User is shown tip confirmation with some level of determinis
 
 ## Installation:
 
@@ -53,16 +61,17 @@ TBU
 
 ## Public Ethereum wallet for certification:
 
-`TBU`
+`0x9fd84217708c3360F50372533f57B35Aaa2B9606`
 
 
-## Simple workflow
+## Happy Path Workflow
 
-1. Enter website
+1. Enter the website
 2. Login with Metamask
-3. Browse images
-4. Select image
-5. Pay a tip to the image author with Metamask (smart contract call)
+3. Browse the images
+4. Select an image
+5. Pay a tip to the image author with Metamask (smart contract call) as a token of appreciation.
+6. The tip is successful after there are 2 Block confirmations added to the chain as a guard rail.
 
 ## Directory structure
 

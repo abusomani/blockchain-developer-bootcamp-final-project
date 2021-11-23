@@ -41,7 +41,8 @@ YES
 3) Running your smart contract unit tests and which port a local testnet should be running on. 
 YES
 
-10. A screencast of you walking through your project? YES/NO
+10. A screencast of you walking through your project? 
+YES
 
 
 Congratulations on finishing your final project!
