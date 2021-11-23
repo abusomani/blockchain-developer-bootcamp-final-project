@@ -56,8 +56,7 @@ and allows people to appreciate art by tipping the author of the image.
 - If you get `TXRejectedError` when sending a transaction, reset your Metamask account from Advanced settings.
 
 ## Screencast link
-
-TBU
+[Youtube Link](https://www.youtube.com/watch?v=emnChd3ZPpI)
 
 ## Public Ethereum wallet for certification:
 
