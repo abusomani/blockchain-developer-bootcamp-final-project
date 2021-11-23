@@ -15,6 +15,18 @@ and allows people to appreciate art by tipping the author of the image.
 - Users should be able to tip any image they like with 0.01 ETH
 - User is shown tip confirmation with some level of determinis
 
+
+### Architecture:
+- Local blockchain development : [Ganache](https://www.trufflesuite.com/ganache)
+- Smart contracts development : [Truffle](https://www.trufflesuite.com/truffle)
+- Decentralized File Storage : [IPFS](https://ipfs.io/)
+- Frontend library : [React](https://reactjs.org/)
+- Interaction with Ehtereum node : [Web3.js](https://web3js.readthedocs.io/en/v1.5.2/#)
+- Crypto wallet for transactions : [Metamask](https://metamask.io/)
+
+![Decentralised Pinterest Architecture](./DepinterestArchitecture.png)
+
+
 ## Installation:
 
 ### Prerequisites
