@@ -22,7 +22,8 @@ YES
 5. Have at least five smart contract unit tests that pass? 
 YES
 
-6. Contain a `deployed_address.txt` file which contains the testnet address and network where your contract(s) have been deployed? YES/NO
+6. Contain a `deployed_address.txt` file which contains the testnet address and network where your contract(s) have been deployed? 
+YES
 
 7. Have a frontend interface built with a framework like React or HTML/CSS/JS that:
 --Detects the presence of MetaMask
